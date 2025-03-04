@@ -6,10 +6,10 @@ from modules.form_filling import fill_linkedin_form
 
 def main():
     # Configuration
-    LINKEDIN_USER = "gudesaidheeran@gmail.com"
-    LINKEDIN_PASS = "123-abc@hjk"
-    RESUME_PATH = "/Users/dheeranchowdary/Downloads/Dheeran_Chowdary_Resume.pdf"
-    JOB_URL = "https://www.linkedin.com/jobs/search/?currentJobId=4169455446&distance=25&geoId=102713980&keywords=machine%20learning%20intern&origin=JOBS_HOME_KEYWORD_HISTORY&refresh=true"
+    LINKEDIN_USER = "youremail@gmail.com"
+    LINKEDIN_PASS = "your_password"
+    RESUME_PATH = "path_to_resume"
+    JOB_URL = "job_application_url"
 
     # Execution Flow
     resume_info = extract_resume_data(RESUME_PATH)
