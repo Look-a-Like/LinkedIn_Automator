@@ -1,0 +1,100 @@
+achievements:
+- description: 206 problems solved
+  name: LeetCode
+- description: Max rating of 1624
+  name: CodeChef
+availability: {}
+certifications: []
+education_details:
+- education_level: Secondary (10th)
+  field_of_study: ''
+  final_evaluation_grade: 10/10 (CGPA)
+  institution: Sri Chaitanya School
+  start_date: '2018'
+  year_of_completion: '2020'
+- education_level: Senior Secondary (11th-12th)
+  field_of_study: ''
+  final_evaluation_grade: 93%
+  institution: Sri Chaitanya Junior College
+  start_date: '2020'
+  year_of_completion: '2022'
+- education_level: Bachelor of Technology
+  field_of_study: Computer Science
+  final_evaluation_grade: 6.82/10 (GPA)
+  institution: Indian Institute of Information Technology, Guwahati (IIITG)
+  start_date: ''
+  year_of_completion: ''
+experience_details:
+- company: OpenHub
+  employment_period: "May 2024 \u2013 July 2024"
+  location: Remote
+  position: Web Developer Intern
+interests: []
+job_preferences:
+  company_preferences: []
+  date_availability: ''
+  easy_apply_preferred: 'Yes'
+  experience_level: []
+  workplace_type: []
+languages: []
+legal_authorization:
+  legally_allowed_to_work_in_india: 'No'
+  requires_sponsorship: 'No'
+  requires_visa: 'No'
+  work_authorization: 'No'
+personal_information:
+  address: ''
+  city: Guwahati
+  country: India
+  date_of_birth: ''
+  email: gude.chowdary22b@iiitg.ac.in
+  github: ''
+  linkedin: ''
+  name: GUDE SAI DHEERAN
+  phone: '9032863059'
+  phone_prefix: ''
+  surname: CHOWDARY
+  zip_code: ''
+projects:
+- description: Implemented a bakery management system using React (frontend), Spring
+    Boot (backend), and MySQL.  Features include real-time order updates, cart management,
+    integrated product/supplier/ingredient information, storage calculations, and
+    profit tracking.
+  link: ''
+  name: Bakery Management System
+- description: Built a chatbot using Python, NumPy, TensorFlow, and NLTK. Implemented
+    text preprocessing (tokenization, lemmatization, stop word removal), used the
+    bag-of-words model, and trained a machine learning model for response generation.
+  link: ''
+  name: Chatbot Development and Natural Language Processing (NLP)
+salary_expectations:
+  salary_range_usd: ''
+self_identification:
+  disability: ''
+  ethnicity: ''
+  gender: ''
+  pronouns: ''
+  veteran: ''
+skills:
+- C/C++
+- Java
+- Python
+- Flutter
+- JavaScript
+- SQL
+- HTML
+- CSS
+- React
+- MySQL
+- Photoshop
+- Pandas
+- NumPy
+- NLTK
+- TensorFlow
+work_preferences:
+  in_person_work: 'No'
+  open_to_relocation: 'No'
+  remote_work: 'No'
+  willing_to_complete_assessments: 'No'
+  willing_to_undergo_background_checks: 'No'
+  willing_to_undergo_drug_tests: 'No'
