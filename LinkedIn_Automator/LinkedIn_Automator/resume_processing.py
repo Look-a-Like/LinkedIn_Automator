@@ -5,7 +5,7 @@ import re
 import streamlit as st
 
 # Configure Gemini API key
-GENAI_API_KEY = "AIzaSyCQe0khiVx6n-Z9vHY4ZmqBcVnFk-xvLDE"
+GENAI_API_KEY = "AIzaSyAsVuAR6vcdP5mzGAHo-Ks-5hu2tE3xEME"
 genai.configure(api_key=GENAI_API_KEY)
 
 def extract_text_from_pdf(uploaded_file):

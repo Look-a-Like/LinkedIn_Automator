@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 
 # Configure Gemini API key
-GENAI_API_KEY = "AIzaSyCQe0khiVx6n-Z9vHY4ZmqBcVnFk-xvLDE"
+GENAI_API_KEY = "AIzaSyAsVuAR6vcdP5mzGAHo-Ks-5hu2tE3xEME"
 genai.configure(api_key=GENAI_API_KEY)
 
 # Load resume data from YAML file

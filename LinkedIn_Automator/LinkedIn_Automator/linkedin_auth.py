@@ -26,6 +26,10 @@ def setup_and_login(username, password):
         time.sleep(5)
         if "feed" in driver.current_url:
             print("✅ Login Successful")
+            # Optionally show a message without closing the browser
+            driver.execute_script("alert('Login successful!')")
+            time.sleep(2)  # Give time for the alert to be seen
+            # Return the driver and wait objects to be used later
             return driver, wait
         else:
             print("❌ Login Failed")

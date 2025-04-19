@@ -6,14 +6,14 @@ achievements:
 availability: {}
 certifications: []
 education_details:
-- education_level: Secondary (10th)
-  field_of_study: ''
+- education_level: Secondary
+  field_of_study: SSC Board
   final_evaluation_grade: 10/10 (CGPA)
   institution: Sri Chaitanya School
   start_date: '2018'
   year_of_completion: '2020'
-- education_level: Senior Secondary (11th-12th)
-  field_of_study: ''
+- education_level: Senior Secondary
+  field_of_study: SSC Board
   final_evaluation_grade: 93%
   institution: Sri Chaitanya Junior College
   start_date: '2020'
@@ -31,17 +31,22 @@ experience_details:
   position: Web Developer Intern
 interests: []
 job_preferences:
-  company_preferences: []
-  date_availability: ''
+  company_preferences:
+  - Startup
+  date_availability: right now
   easy_apply_preferred: 'Yes'
-  experience_level: []
-  workplace_type: []
+  experience_level:
+  - Entry Level
+  workplace_type:
+  - On-site
+  - Hybrid
+  - Remote
 languages: []
 legal_authorization:
-  legally_allowed_to_work_in_india: 'No'
+  legally_allowed_to_work_in_india: 'Yes'
   requires_sponsorship: 'No'
   requires_visa: 'No'
-  work_authorization: 'No'
+  work_authorization: 'Yes'
 personal_information:
   address: ''
   city: Guwahati
@@ -56,25 +61,26 @@ personal_information:
   surname: CHOWDARY
   zip_code: ''
 projects:
-- description: Implemented a bakery management system using React (frontend), Spring
-    Boot (backend), and MySQL.  Features include real-time order updates, cart management,
-    integrated product/supplier/ingredient information, storage calculations, and
-    profit tracking.
+- description: Implemented the bakery management system using React, Spring Boot,
+    and MySQL. Features include a main page with recent orders and real-time updates,
+    a cart page, and a product management section with integrated product, supplier,
+    and ingredient information, along with active storage calculations. Implemented
+    monthly profit calculations and profit tracking.
   link: ''
   name: Bakery Management System
 - description: Built a chatbot using Python, NumPy, TensorFlow, and NLTK. Implemented
-    text preprocessing (tokenization, lemmatization, stop word removal), used the
-    bag-of-words model, and trained a machine learning model for response generation.
+    text preprocessing techniques and trained a machine learning model to classify
+    user inputs and generate responses.
   link: ''
   name: Chatbot Development and Natural Language Processing (NLP)
 salary_expectations:
   salary_range_usd: ''
 self_identification:
-  disability: ''
-  ethnicity: ''
-  gender: ''
+  disability_description: ''
+  ethnicity: Asian - Indian - South Indian
+  gender: Male(he/him)
+  has_disability: 'No'
   pronouns: ''
-  veteran: ''
 skills:
 - C/C++
 - Java
@@ -92,9 +98,8 @@ skills:
 - NLTK
 - TensorFlow
 work_preferences:
-  in_person_work: 'No'
-  open_to_relocation: 'No'
-  remote_work: 'No'
-  willing_to_complete_assessments: 'No'
-  willing_to_undergo_background_checks: 'No'
+  in_person_work: 'Yes'
+  open_to_relocation: 'Yes'
+  remote_work: 'Yes'
+  willing_to_undergo_background_checks: 'Yes'
   willing_to_undergo_drug_tests: 'No'
