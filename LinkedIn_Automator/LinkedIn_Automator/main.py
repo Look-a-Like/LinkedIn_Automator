@@ -10,18 +10,35 @@ from form_filling import fill_linkedin_form
 import yaml
 import time
 import os
+import requests
 from data_access_layer import RepositoryFactory
+
+API_BASE = "http://localhost:8000"
+
+# Fetch resume data
+def fetch_resume(user_id):
+    try:
+        response = requests.get(f"{API_BASE}/resumes/latest", headers={"X-User-ID": user_id})
+        if response.status_code == 200:
+            resume_data = response.json()["resume"]["data"]
+            return resume_data
+        else:
+            st.warning("No resume found or error fetching resume.")
+            return None
+    except Exception as e:
+        st.error(f"Error fetching resume: {e}")
+        return None
+
+
+if "user_data" not in st.session_state:
+    st.session_state["user_data"] = {
+        "user_id": None,
+        "resume_id": None
+    }
 
 
 def main():
     st.title("Automated Resume Analyzer & LinkedIn Job Application")
-
-    # Initialize DAL repository
-    resume_repo = RepositoryFactory.create_resume_repository()
-
-    # Initialize session states if they don't exist
-    if "page" not in st.session_state:
-        st.session_state["page"] = "Upload Resume"
 
     if "user_data" not in st.session_state:
         st.session_state.user_data = {
@@ -29,38 +46,16 @@ def main():
             "resume_id": None
         }
 
-    if "logged_in" not in st.session_state:
-        st.session_state["logged_in"] = False
+    def deep_merge(default, extracted):
+        """Recursively merge extracted data into default structure."""
+        for key, value in extracted.items():
+            if isinstance(value, dict) and key in default:
+                deep_merge(default[key], value)
+            else:
+                default[key] = value
+        return default
 
-    if "jobs_fetched" not in st.session_state:
-        st.session_state["jobs_fetched"] = False
-
-    driver = None  # Initialize driver to avoid UnboundLocalError
-    suggested_jobs = []
-    extracted_data = {}  # Initialize extracted_data to avoid UnboundLocalError
-
-    # Radio button for direct application
-    apply_directly = st.radio("Do you want to apply directly with your resume?", ("Yes", "No"))
-
-    # Sidebar navigation
-    with st.sidebar:
-        st.header("Navigation")
-        # Save current page before changing it
-        current_page = st.session_state["page"]
-
-        # Navigation radio buttons
-        selected_page = st.radio(
-            "Go to:",
-            ["Upload Resume", "Job Search", "LinkedIn Login", "Auto Apply", "Application History"]
-        )
-
-        # Only update the page if the user has selected a different one
-        if selected_page != current_page:
-            st.session_state["page"] = selected_page
-            # Force rerun to apply the page change immediately
-            st.rerun()
-
-    # Default structure for form fields
+        # Default structure for form fields
     default_data = {
         "personal_information": {
             "name": "", "surname": "", "date_of_birth": "", "country": "",
@@ -97,15 +92,60 @@ def main():
         "skills": []
     }
 
+    query_params = st.query_params
+    if "user_id" in query_params:
+        user_id = query_params["user_id"][0]
+        st.session_state.user_data["user_id"] = user_id
+        st.success(f"User ID detected from login: {user_id}")
+
+        if "fetched_resume" not in st.session_state:
+            resume_data = fetch_resume(user_id)
+            if resume_data:
+                st.session_state.analysis = resume_data
+                st.session_state.fetched_resume = True
+                merged_data = deep_merge(default_data.copy(), resume_data)
+                st.session_state["merged_data"] = merged_data
+
+    # Initialize DAL repository
+    resume_repo = RepositoryFactory.create_resume_repository()
+
+    # Initialize session states if they don't exist
+    if "page" not in st.session_state:
+        st.session_state["page"] = "Upload Resume"
+
+    if "logged_in" not in st.session_state:
+        st.session_state["logged_in"] = False
+
+    if "jobs_fetched" not in st.session_state:
+        st.session_state["jobs_fetched"] = False
+
+    driver = None  # Initialize driver to avoid UnboundLocalError
+    suggested_jobs = []
+    extracted_data = {}  # Initialize extracted_data to avoid UnboundLocalError
+
+    # Radio button for direct application
+    apply_directly = st.radio("Do you want to apply directly with your resume?", ("Yes", "No"))
+
+    # Sidebar navigation
+    with st.sidebar:
+        st.header("Navigation")
+        # Save current page before changing it
+        current_page = st.session_state["page"]
+
+        # Navigation radio buttons
+        selected_page = st.radio(
+            "Go to:",
+            ["Upload Resume", "Job Search", "LinkedIn Login", "Auto Apply", "Application History"]
+        )
+
+        # Only update the page if the user has selected a different one
+        if selected_page != current_page:
+            st.session_state["page"] = selected_page
+            # Force rerun to apply the page change immediately
+            st.rerun()
+
     # Merge extracted data into default structure
-    def deep_merge(default, extracted):
-        """Recursively merge extracted data into default structure."""
-        for key, value in extracted.items():
-            if isinstance(value, dict) and key in default:
-                deep_merge(default[key], value)
-            else:
-                default[key] = value
-        return default
+
 
     # Page content
     if st.session_state["page"] == "Upload Resume":
@@ -152,7 +192,7 @@ def main():
         extracted_data = extracted_data if extracted_data else {}
 
         # Merge the data
-        merged_data = deep_merge(default_data.copy(), extracted_data)
+        merged_data = st.session_state.get("merged_data", deep_merge(default_data.copy(), extracted_data))
 
         # Display form fields
         with st.expander("📋 Personal Information"):
@@ -490,47 +530,44 @@ def main():
 
         st.markdown(custom_css, unsafe_allow_html=True)
 
-        # Save button and validation
         if st.button("🚀 Save Resume Data"):
             validation_errors = validate_required_sections()
 
             if validation_errors:
-                # Display validation errors
                 st.error("Please fix the following errors before saving:")
                 for error in validation_errors:
                     st.warning(error)
             else:
-                with st.spinner("⏳ Saving data to database and generating YAML file..."):
-                    # Save user data
-                    user_data = {
-                        "email": merged_data["personal_information"]["email"],
-                        "name": merged_data["personal_information"]["name"],
-                        "surname": merged_data["personal_information"]["surname"],
-                        "phone": merged_data["personal_information"]["phone"]
-                    }
+                with st.spinner("⏳ Saving resume to backend..."):
+                    try:
+                        user_id = st.session_state.user_data["user_id"]
+                        headers = {
+                            "Content-Type": "application/json",
+                            "X-User-ID": st.session_state.user_data["user_id"]  # ✅ Pass the user_id here
+                        }
 
-                    user_id = resume_repo.save_user(user_data)
-                    st.session_state.user_data["user_id"] = user_id
-
-                    # Save resume data if we have a file path
-                    if "resume_path" in st.session_state:
-                        resume_id = resume_repo.save_resume(
-                            user_id,
-                            st.session_state.resume_path,
-                            merged_data
+                        # Send to backend
+                        response = requests.post(
+                            f"http://localhost:8000/resumes/",
+                            json=merged_data,
+                            headers=headers
                         )
-                        st.session_state.user_data["resume_id"] = resume_id
 
-                        # Also save to YAML
-                        resume_repo.save_resume_as_yaml(merged_data, "final_resume.yaml")
+                        if response.status_code == 200:
+                            data = response.json()
+                            st.session_state.user_data["resume_id"] = data["resume_id"]
 
-                        st.success("✅ Data saved to database and YAML file generated: **'final_resume.yaml'**")
-                        # After successful save, prompt user to go to job search
-                        if st.button("Continue to Job Search", key="continue_to_job_search"):
-                            st.session_state["page"] = "Job Search"
-                            st.rerun()
-                    else:
-                        st.warning("No resume file uploaded. Please upload a resume first.")
+                            st.success(f"✅ Resume saved with ID: {data['resume_id']}")
+
+                            # Prompt to continue
+                            if st.button("Continue to Job Search", key="continue_to_job_search"):
+                                st.session_state["page"] = "Job Search"
+                                st.rerun()
+                        else:
+                            st.error(f"❌ Failed to save resume: {response.text}")
+                    except Exception as e:
+                        st.error(f"Exception occurred while saving: {e}")
+
 
     # Store merged_data in session state for access by other pages
     if "merged_data" not in st.session_state and 'extracted_data' in locals():
