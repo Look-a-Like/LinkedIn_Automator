@@ -1,14 +1,14 @@
-import React from 'react';
-import LoginHeader from './LoginHeader';
-import LoginMain from './LoginMain';
-import LoginFooter from './LoginFooter';
+import React from "react";
+import LoginHeader from "./LoginHeader";
+import LoginMain from "./LoginMain";
+import LoginFooter from "./LoginFooter";
 
 function LoginPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-t overflow-y-hidden">
-      <LoginHeader/>
-      <LoginMain/>
-      <LoginFooter/>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-100 to-blue-100">
+      <LoginHeader />
+      <LoginMain />
+      <LoginFooter />
     </div>
   );
 }
