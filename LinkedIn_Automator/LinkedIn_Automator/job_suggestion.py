@@ -44,42 +44,31 @@ def generate_linkedin_search_url(resume_data):
 
 # AI-Powered Job Suggestions
 def suggest_jobs(resume_data):
-    """Uses Gemini AI to suggest relevant job roles based on resume data."""
+    """Returns hardcoded job suggestions instead of using AI."""
+    # Hardcoded job URLs
+    job_urls = [
+        "https://www.linkedin.com/jobs/view/4204607702",
+        "https://www.linkedin.com/jobs/view/4206842761",
+        "https://www.linkedin.com/jobs/view/4213226622",
+        "https://www.linkedin.com/jobs/view/4208068453",
+        "https://www.linkedin.com/jobs/view/4208130866",
+        "https://www.linkedin.com/jobs/view/4207343616",
+        "https://www.linkedin.com/jobs/view/4198514422",
+        "https://www.linkedin.com/jobs/view/4196043167",
+        "https://www.linkedin.com/jobs/view/4211454041",
+        "https://www.linkedin.com/jobs/view/4206428047",
+        "https://www.linkedin.com/jobs/view/4202749037",
+        "https://www.linkedin.com/jobs/view/4209805460"
+    ]
     
-    # Extract key information for the prompt
-    education = resume_data.get('education_details', [])
-    projects = resume_data.get('projects', [])
-    skills = resume_data.get('skills', [])
-    achievements = resume_data.get('achievements', [])
+    # Extract job IDs from URLs for display purposes
+    job_titles = [f"Job {url.split('/')[-1]}" for url in job_urls]
     
-    prompt = f"""
-    Based on the following resume details, suggest 10 most relevant job roles for an entry-level candidate:
+    # Store URLs in a global variable for use in other functions
+    global hardcoded_job_urls
+    hardcoded_job_urls = job_urls
     
-    Education:
-    {yaml.dump(education)}
-    
-    Projects:
-    {yaml.dump(projects)}
-    
-    Skills:
-    {yaml.dump(skills)}
-    
-    Achievements:
-    {yaml.dump(achievements)}
-    
-    Provide results in this format:
-    1. Job Title
-    2. Job Title
-    
-    Only list the job titles without additional details or descriptions.
-    """
-    
-    model = genai.GenerativeModel("gemini-1.5-pro")
-    response = model.generate_content(prompt)
-    
-    # Extract job titles from AI response
-    job_titles = [line.split(". ", 1)[-1] for line in response.text.strip().split("\n") if line.strip() and "." in line]
-    return job_titles[:10]  # Return top 10 job suggestions
+    return job_titles
 
 # Click a button safely with fallbacks
 def safe_click(driver, element, wait_time=2):
