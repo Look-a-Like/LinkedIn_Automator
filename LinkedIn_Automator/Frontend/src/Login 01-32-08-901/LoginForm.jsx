@@ -3,7 +3,6 @@ import { checkValidData } from "../utils/checkValidData";
 import { Link, useNavigate } from "react-router-dom";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { account } from "../../appwrite";
-import jobSearchImage from "./image.png";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +12,7 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
+  const LoginNavigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,87 +34,70 @@ const LoginForm = () => {
     }
   };
 
-  // Updated form submission handler with API call to FastAPI backend
-  const handleFormSubmission = async () => {
-    setIsSubmitting(true);
-    const { email, password } = formData;
+  const handleFormSubmission = () => {
+    const { email } = formData;
     const message = checkValidData(email);
     setErrorMessage(message);
 
-    if (!message && email && password) {
-      try {
-        console.log("Attempting login with:", { email, password });
-
-        // API call to your FastAPI backend with fixed CORS settings
-        const response = await fetch("http://localhost:8000/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          mode: "cors", // Explicitly set CORS mode
-          credentials: "include", // Include credentials
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        });
-
-        if (!response.ok) {
-          // Handle error responses
-          const errorData = await response
-            .json()
-            .catch(() => ({ detail: "Login failed" }));
-          console.error("Login failed:", errorData);
-          setErrorMessage(
-            errorData.detail ||
-              "Login failed. Please check your credentials and try again."
-          );
-          setIsSubmitting(false);
-          return;
-        }
-
-        const result = await response.json();
-        console.log("Login successful:", result);
-
-        // Store user data and token in localStorage
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userId", result.user.id);
-        localStorage.setItem("username", result.user.username);
-        localStorage.setItem("token", result.access_token);
-
-        // Reset form and navigate
-        // Reset form
-        setFormData({
-          email: "",
-          password: "",
-        });
-        setErrorMessage("");
-
-        // ✅ Send to Fivetran proxy
-        await fetch("http://localhost:8000/proxy/fivetran", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            event: "user_login",
-            user_id: result.user.user_id,
-          }),
-        });
-
-        // ✅ Then redirect to Streamlit with user_id
-        window.location.href = `http://localhost:8501?user_id=${result.user.user_id}`;
-      } catch (error) {
-        console.error("Error during login API call:", error);
-        setErrorMessage(
-          "Connection error. Please check your internet connection and try again."
-        );
-        setIsSubmitting(false);
-      }
+    if (!message && formData.email) {
+      // Store the user email address
+      localStorage.setItem("userEmail", formData.email);
+      setFormData({
+        email: "",
+        password: "",
+      });
+      setErrorMessage("");
+      window.location.href = "http://localhost:8501";
     } else {
       setIsSubmitting(false);
     }
   };
+
+  // const handleFormSubmission = async () => {
+  //     setIsSubmitting(true);
+  //     const { email } = formData;
+  //     const message = checkValidData(email);
+  //     setErrorMessage(message);
+
+  //     if (!message && formData.email && formData.password) {
+  //         try {
+  //             console.log("formData :: ", formData);
+  //             const response = await fetch('YOUR_API_ENDPOINT', {
+  //                 method: 'POST',
+  //                 headers: {
+  //                     'token': "YOUR_TOKEN",
+  //                     'Content-Type': 'application/json',
+  //                 },
+  //                 body: JSON.stringify(formData),
+  //             });
+
+  //             const result = await response.json();
+
+  //             if (response.ok && result.data) {
+  //                 // Store the user's email address in localStorage
+  //                 localStorage.setItem('userEmail', formData.email);
+
+  //                 // Navigate to the main page
+  //                 setFormData({
+  //                     email: '',
+  //                     password: '',
+  //                 });
+  //                 setErrorMessage('');
+  //                 LoginNavigate('/MainPage');
+  //             } else {
+  //                 // Handle case where response is not ok or data is missing
+  //                 setErrorMessage('Login failed. Please check your credentials and try again.');
+  //             }
+  //         } catch (error) {
+  //             console.error('Error Logging in', error.message);
+  //             setErrorMessage('An error occurred while logging in. Please try again later.');
+  //         } finally {
+  //             setIsSubmitting(false);
+  //         }
+  //     } else {
+  //         setIsSubmitting(false);
+  //     }
+  // };
 
   const { email, password } = formData;
   const isActive = email && password && !isSubmitting;
@@ -126,18 +109,17 @@ const LoginForm = () => {
         <div className="mb-8">
           {/* Placeholder for 3D image with animations */}
           <div className="w-64 h-64 bg-gray-300 flex items-center justify-center">
-            <img
-              src={jobSearchImage}
-              alt="Job Search Illustration"
-              className="w-full h-full object-cover"
-            />
+            <span className="text-center text-gray-500">
+              NEED TO KEEP A 3D IMAGE WITH SOME ANIMATIONS AS A VIDEO SHOULD BE
+              PLACE...
+            </span>
           </div>
         </div>
         <div className="text-center">
           <h1 className="text-3xl lg:text-4xl font-bold mb-4">
             Software For
             <br></br>
-            <span className="text-blue-500">Job Automation</span>
+            <span className="text-red-500">Job Automation</span>
           </h1>
           <p className="text-gray-500">Description part</p>
         </div>
@@ -146,8 +128,8 @@ const LoginForm = () => {
       <div className="w-1/2 flex justify-center items-center p-8 lg:p-12">
         <div className="max-w-md w-full">
           <div className="w-full py-4 lg:py-6 font-semibold text-center text-xl lg:text-2xl">
-            Welcome back to{" "}
-            <span className="text-blue-500">Job Automator </span> Community
+            Welcome back to <span className="text-red-600">Job Automator </span>{" "}
+            Community
           </div>
           <div className="flex justify-center mt-4 mb-6">
             <button
@@ -155,7 +137,7 @@ const LoginForm = () => {
               className="mx-2 px-4 py-2 bg-white border border-gray-300 rounded-full flex items-center"
             >
               <img
-                src="https://www.google.com/favicon.ico"
+                src="path/to/google-icon.png"
                 alt="Google"
                 className="w-5 h-5 mr-2"
               />{" "}
@@ -163,7 +145,7 @@ const LoginForm = () => {
             </button>
             <button className="mx-2 px-4 py-2 bg-white border border-gray-300 rounded-full flex items-center">
               <img
-                src="https://github.com/favicon.ico"
+                src="path/to/github-icon.png"
                 alt="Github"
                 className="w-5 h-5 mr-2"
               />{" "}
@@ -185,7 +167,6 @@ const LoginForm = () => {
                 name="email"
                 value={email}
                 onChange={handleInputChange}
-                disabled={isSubmitting}
               />
             </div>
             <div className="py-2 relative">
@@ -198,7 +179,6 @@ const LoginForm = () => {
                   name="password"
                   value={password}
                   onChange={handleInputChange}
-                  disabled={isSubmitting}
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-xl">
                   {visible ? (
@@ -211,9 +191,7 @@ const LoginForm = () => {
                 </div>
               </div>
             </div>
-            {errorMessage && (
-              <p className="text-rose-500 mt-2 text-sm">{errorMessage}</p>
-            )}
+            {errorMessage && <p className="text-rose-500">{errorMessage}</p>}
             <div className="flex items-center mt-4">
               <input type="checkbox" id="rememberMe" className="mr-2" />
               <label htmlFor="rememberMe" className="text-lg lg:text-xl">
@@ -221,28 +199,21 @@ const LoginForm = () => {
               </label>
             </div>
             <div className="mt-6 lg:mt-10 flex justify-center">
-              {isSubmitting ? (
-                <div className="flex flex-col items-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 mb-2"></div>
-                  <p className="text-gray-600">Logging in...</p>
-                </div>
-              ) : (
-                <button
-                  disabled={!isActive}
-                  className={`px-6 py-2 m-2 ${
-                    isActive ? "" : "opacity-50"
-                  } text-lg lg:text-xl rounded-full font-semibold bg-blue-500 text-white`}
-                  onClick={handleFormSubmission}
-                >
-                  LOG IN
-                </button>
-              )}
+              <button
+                disabled={!isActive}
+                className={`px-6 py-2 m-2 ${
+                  isActive ? "" : "opacity-50"
+                } text-lg lg:text-xl rounded-full font-semibold bg-red-500 text-white`}
+                onClick={handleFormSubmission}
+              >
+                {isSubmitting ? "Submitting..." : "LOG IN"}
+              </button>
             </div>
           </form>
           <div className="text-center mt-4">
             <p>
               No Account yet?{" "}
-              <Link to="/SignUp" className="text-blue-600 font-semibold">
+              <Link to="/SignUp" className="text-red-600 font-semibold">
                 SIGN UP
               </Link>
             </p>
