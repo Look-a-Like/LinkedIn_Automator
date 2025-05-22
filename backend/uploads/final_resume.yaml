@@ -1,0 +1,86 @@
+achievements:
+- 'GATE 2025: Secured a rank of 532 and a score of 767.'
+education:
+- '**Bachelor of Technology, Computer Science and Engineering:** Indian Institute
+  of Information Technology, Guwahati (Expected June 2026)'
+experience:
+- "**Comparative study of UAV Path Planning Algorithms:** (Jan 2025 \u2013 May 2025)\
+  \ - Python"
+- '**C/C++:** 4 years (Coursework)'
+- '**Python:** 4 years (Coursework) + 5 months (UAV Path Planning) + 4 months (LinkedIn
+  Tool) + 1 month (Sentiment Analysis) + 1 month (Materna) = 4 years and 11 months
+  (approx. 5 years)'
+- '**Java:** 4 years (Coursework)'
+- '**SQL:** 4 years (Coursework)'
+- '**MySQL:** 4 years (Coursework)'
+- '**MongoDB:** 4 years (Coursework)'
+- '**Node.js:** 4 years (Coursework)'
+- '**React.js:** 1 month (Materna) + 4 years (Coursework) = 4 years and 1 month (approx.
+  4 years)'
+- '**Streamlit:** 4 months (LinkedIn Tool) + 1 month (Sentiment Analysis) = 5 months'
+- '**Selenium:** 4 months (LinkedIn Tool)'
+- '**pdfplumber:** 4 months (LinkedIn Tool)'
+- '**PyYAML:** 4 months (LinkedIn Tool)'
+- '**Flask:** 1 month (Materna)'
+- '**PyTorch:** 1 month (Materna)'
+- '**Hugging Face:** 1 month (Materna)'
+- '**AWS:** 1 month (Materna)'
+- '**Twilio:** 1 month (Materna)'
+- '**TextBlob:** 1 month (Sentiment Analysis)'
+- '**Seaborn:** 1 month (Sentiment Analysis)'
+- '**Pandas:** 1 month (Sentiment Analysis)'
+- '**TypeScript:** 1 month (Materna)'
+personal_information:
+  address: '** Durgapur'
+  city: '** Durgapur'
+  country: India
+  gender: "** Male (\u2642)"
+  name: '** Madhuboni Basu'
+  phone: '** +91 8972167117'
+  pin_code: ''
+  state: West Bengal
+projects:
+- '**Automated LinkedIn Job Application Tool:** (Jan 2025 - Apr 2025) - Streamlit,
+  Python, Selenium, pdfplumber, PyYAML'
+- '**Materna:** (Mar 2025 - Apr 2025) - React, TypeScript, Python, Flask, PyTorch,
+  Hugging Face, AWS, Twilio'
+- '**Sentiment Analysis App:** (Dec 2024 - Jan 2025) - Python, Streamlit, TextBlob,
+  Seaborn, Pandas'
+recommended_jobs:
+- Full Stack Developer
+- Data Scientist
+- Machine Learning Engineer
+- Backend Developer
+- Frontend Developer
+- DevOps Engineer
+- Cloud Engineer
+- AI/ML Engineer
+- Software Engineer
+- NLP Engineer
+- Data Engineer
+- Web Developer
+- Software Developer
+- Python Developer
+- React Developer
+skills:
+- C/C++
+- Python
+- Java
+- SQL
+- MySQL
+- MongoDB
+- Node.js
+- React.js
+- Streamlit
+- Selenium
+- pdfplumber
+- PyYAML
+- Flask
+- PyTorch
+- Hugging Face
+- AWS
+- Twilio
+- TextBlob
+- Seaborn
+- Pandas
+- Google Translate API
