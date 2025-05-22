@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Recommendations - Job Application Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Job Assistant</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/resume">Resume Processing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/info">Information Section</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/jobs">Job Recommendations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">LinkedIn Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/apply">Auto Apply</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Job Recommendations</h2>
+        <div id="jobsContent"></div>
+    </div>
+    <script>
+        window.onload = function() {
+            fetch('/api/get_recommended_jobs')
+                .then(response => {
+                    console.log('Recommended jobs response:', response);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch recommended jobs');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Recommended jobs data:', data);
+                    const content = document.getElementById('jobsContent');
+                    
+                    // Check if there are recommended jobs
+                    if (!data.recommended_jobs || data.recommended_jobs.length === 0) {
+                        content.innerHTML = `
+                            <div class="alert alert-warning" role="alert">
+                                <h4 class="alert-heading">No Job Recommendations Available</h4>
+                                <p>It seems we don't have enough information to provide personalized job recommendations.</p>
+                                <hr>
+                                <p class="mb-0">Please complete your <a href="/info" class="alert-link">Information Section</a> to get tailored job recommendations.</p>
+                            </div>`;
+                        return;
+                    }
+
+                    content.innerHTML = '<h3>Recommended Jobs from Profile</h3>';
+                    content.innerHTML += '<p>Loading Easy Apply jobs... This may take a few moments.</p>';
+                    
+                    const jobs = data.recommended_jobs || [];
+                    const location = data.location || '';
+
+                    if (jobs.length > 0) {
+                        console.log('Fetching Easy Apply jobs...');
+                        fetch('/api/get_easy_apply_jobs')
+                            .then(response => {
+                                console.log('Easy Apply jobs response:', response);
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(easyApplyJobs => {
+                                console.log('Easy Apply jobs data:', easyApplyJobs);
+                                content.innerHTML = '<h3>Easy Apply Jobs from Your Profile</h3>';
+                                
+                                if (easyApplyJobs.length > 0) {
+                                    easyApplyJobs.forEach(job => {
+                                        console.log('Processing job:', job);
+                                        content.innerHTML += `
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${job.title}</h5>
+                                                    <a href="${job.url}" class="btn btn-primary" target="_blank">Easy Apply on LinkedIn</a>
+                                                </div>
+                                            </div>`;
+                                    });
+                                } else {
+                                    content.innerHTML += '<p>No Easy Apply jobs found for your profile. Try updating your profile or checking back later.</p>';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Detailed error fetching Easy Apply jobs:', error);
+                                content.innerHTML = '<h3>Easy Apply Jobs from Your Profile</h3>';
+                                content.innerHTML += `<p class="text-danger">Error loading Easy Apply jobs: ${error.message}</p>`;
+                            });
+                    } else {
+                        content.innerHTML = '<p>No recommended jobs available. Please complete the Information Section first.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching recommended jobs:', error);
+                    const content = document.getElementById('jobsContent');
+                    content.innerHTML = `
+                        <div class="alert alert-warning" role="alert">
+                            <h4 class="alert-heading">Unable to Load Job Recommendations</h4>
+                            <p>We encountered an error while loading your job recommendations.</p>
+                            <hr>
+                            <p class="mb-0">Please ensure you have completed your <a href="/info" class="alert-link">Information Section</a> before viewing job recommendations.</p>
+                        </div>`;
+                });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Processing - Job Application Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Job Assistant</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="/resume">Resume Processing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/info">Information Section</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/jobs">Job Recommendations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">LinkedIn Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/apply">Auto Apply</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Resume Processing</h2>
+        <form id="resumeForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="resumeFile" class="form-label">Upload PDF Resume</label>
+                <input type="file" class="form-control" id="resumeFile" name="resumeFile" accept=".pdf" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Analyze Resume</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('resumeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            const fileInput = document.getElementById('resumeFile');
+
+            // Check if a file is selected
+            if (!fileInput.files[0]) {
+                alert('Please select a file');
+                return;
+            }
+
+            // Check file type
+            if (!fileInput.files[0].type.includes('pdf')) {
+                alert('Please upload a PDF file');
+                return;
+            }
+
+            // Check file size (max 10MB)
+            if (fileInput.files[0].size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            fetch('/api/upload_resume', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.message || 'Upload failed');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                fileInput.value = ''; // Clear the file input after successful upload
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'Error uploading resume. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

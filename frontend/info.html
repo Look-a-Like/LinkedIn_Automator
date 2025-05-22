@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Section - Job Application Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Job Assistant</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/resume">Resume Processing</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/info">Information Section</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/jobs">Job Recommendations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">LinkedIn Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/apply">Auto Apply</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Information Section</h2>
+        <form id="infoForm">
+            <div id="infoContent"></div>
+            <button type="submit" class="btn btn-primary mt-3">Save and Proceed</button>
+        </form>
+    </div>
+    <script>
+        window.onload = function() {
+            fetch('/api/get_info')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch resume data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched data:', data);
+                    const content = document.getElementById('infoContent');
+                    content.innerHTML = '';
+
+                    // Helper function for single-value fields
+                    function createInput(label, name, value) {
+                        const div = document.createElement('div');
+                        div.className = 'mb-3';
+                        div.innerHTML = `
+                            <label class="form-label">${label}</label>
+                            <input type="text" class="form-control" name="${name}" value="${value || ''}">
+                        `;
+                        content.appendChild(div);
+                    }
+
+                    // Helper function for list fields
+                    function createListInput(label, name, values) {
+                        const div = document.createElement('div');
+                        div.className = 'mb-3';
+                        div.innerHTML = `<label class="form-label">${label}</label>`;
+                        const items = Array.isArray(values) ? values : [];
+                        items.forEach((item, index) => {
+                            if (item) {
+                                div.innerHTML += `
+                                    <input type="text" class="form-control mb-2" name="${name}[${index}]" value="${item}">
+                                `;
+                            }
+                        });
+                        div.innerHTML += `
+                            <input type="text" class="form-control mb-2" name="${name}[${items.length}]" value="">
+                        `;
+                        content.appendChild(div);
+                    }
+
+                    // Helper function for skills
+                    function createSkillsInput(label, skills) {
+                        const div = document.createElement('div');
+                        div.className = 'mb-3';
+                        div.innerHTML = `<label class="form-label">${label}</label>`;
+                        const skillList = Array.isArray(skills) ? skills : [];
+                        skillList.forEach((skill, index) => {
+                            div.innerHTML += `
+                                <input type="text" class="form-control mb-2" name="Skills[${index}]" value="${skill}">
+                            `;
+                        });
+                        div.innerHTML += `
+                            <input type="text" class="form-control mb-2" name="Skills[${skillList.length}]" value="">
+                        `;
+                        content.appendChild(div);
+                    }
+
+                    // Populate form fields
+                    createInput('Name', 'Name', data['Name']);
+                    createInput('Phone Number', 'Phone Number', data['Phone Number']);
+                    createInput('Address', 'Address', data['Address']);
+                    createInput('City', 'City', data['City']);
+                    createInput('State', 'State', data['State']);
+                    createInput('Country', 'Country', data['Country']);
+                    createInput('Pin Code', 'Pin Code', data['Pin Code']);
+                    createInput('Gender', 'Gender', data['Gender']);
+                    createListInput('Education Details', 'Education Details', data['Education Details']);
+                    createListInput('Projects', 'Projects', data['Projects']);
+                    createListInput('Experience', 'Experience', data['Experience']);
+                    createListInput('Achievements', 'Achievements', data['Achievements']);
+                    createSkillsInput('Skills', data['Skills']);
+                    createListInput('Recommended Jobs', 'Recommended Jobs', data['Recommended Jobs']);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    alert('Error: Unable to load resume data. Please try again.');
+                });
+        };
+
+        document.getElementById('infoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            for (const [key, value] of formData.entries()) {
+                if (key.includes('[')) {
+                    const [baseKey, index] = key.split(/[\[\]]/).filter(Boolean);
+                    if (!data[baseKey]) data[baseKey] = [];
+                    data[baseKey][index] = value;
+                } else {
+                    data[key] = value;
+                }
+            }
+            // Clean up arrays
+            for (const key in data) {
+                if (Array.isArray(data[key])) {
+                    data[key] = data[key].filter(item => item && item.trim());
+                }
+            }
+            console.log('Processed form data:', data);
+
+            fetch('/api/save_info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to save data');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('Data saved successfully! Redirecting to Job recommendations');
+                    setTimeout(() => {
+                        window.location.href = '/jobs';
+                    }, 1000);
+                } else {
+                    alert('Error saving data');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving data:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
