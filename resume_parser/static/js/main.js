@@ -290,3 +290,57 @@ document.getElementById('linkedinLoginForm').addEventListener('submit', async fu
         document.querySelector('.container').appendChild(errorMessage);
     }
 });
+
+// Add this to your existing JavaScript code
+function displayPersonalInfo(data) {
+    // Get references to the elements
+    const personalInfoSection = document.getElementById('personalInfo');
+    const personName = document.getElementById('personName');
+    const personPhone = document.getElementById('personPhone');
+    const personCountry = document.getElementById('personCountry');
+    const personEmail = document.getElementById('personEmail');
+
+    // Check if we have data
+    if (!data) {
+        console.error('No personal information data provided');
+        return;
+    }
+
+    // Update the elements with data
+    if (personName) personName.textContent = data.name || 'N/A';
+    if (personPhone) personPhone.textContent = data.phone || 'N/A';
+    if (personCountry) personCountry.textContent = data.country || 'N/A';
+    if (personEmail) personEmail.textContent = data.email || 'N/A';
+
+    // Show the personal info section
+    if (personalInfoSection) {
+        personalInfoSection.style.display = 'block';
+    }
+}
+
+// Modify your existing form submission handler to include this
+// Replace the problematic form submission handler with this corrected version
+document.querySelector('form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target); // Use e.target instead of this
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to upload file');
+        }
+        
+        if (result.success) {
+            showAnalysisResults(result.data);
+            displayPersonalInfo(result.data.personal_information); // Fix: access personal_information from result.data
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message || 'An error occurred while uploading the resume');
+    }
+});

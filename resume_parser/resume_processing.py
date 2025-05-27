@@ -35,7 +35,8 @@ def analyze_resume(text, links):
     data = {
         'personal_information': {
             'name': '',
-            'surname': '',
+            'phone': '',
+            'country': '',
             'email': ''
         },
         'skills': [],
@@ -45,6 +46,31 @@ def analyze_resume(text, links):
     }
     
     try:
+        # First try to extract basic information using regex patterns
+        # Name pattern (assuming name is at the beginning of resume)
+        name_match = re.search(r'^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)', text.strip())
+        if name_match:
+            data['personal_information']['name'] = name_match.group(1)
+
+        # Phone number pattern
+        phone_pattern = r'(?:(?:\+\d{1,3}[-.\s]?)?(?:\d{3}[-.\s]?)?\d{3}[-.\s]?\d{4})'
+        phone_match = re.search(phone_pattern, text)
+        if phone_match:
+            data['personal_information']['phone'] = phone_match.group(0)
+
+        # Email pattern
+        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        email_match = re.search(email_pattern, text)
+        if email_match:
+            data['personal_information']['email'] = email_match.group(0)
+
+        # Country pattern (common format)
+        country_pattern = r'\b(?:India|USA|United States|UK|United Kingdom|Canada|Australia)\b'
+        country_match = re.search(country_pattern, text)
+        if country_match:
+            data['personal_information']['country'] = country_match.group(0)
+
+        # Process the rest of the resume sections
         lines = text.split('\n')
         current_section = ''
         current_project = None

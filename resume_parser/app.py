@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, jsonify, session
 from werkzeug.utils import secure_filename
 import os
@@ -59,36 +60,53 @@ def upload_resume():
     
     if file and file.filename.endswith('.pdf'):
         try:
-            # Save the file first
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             
-            # Process the resume from saved file
             try:
                 resume_text, links = extract_text_from_pdf_improved(filepath)
-                print("Extracted text:", resume_text[:500])  # Print first 500 characters for debugging
+                print("Extracted text:", resume_text[:500])
                 if not resume_text or not resume_text.strip():
                     return jsonify({'error': 'PDF appears to be empty or contains no extractable text'}), 400
             except Exception as e:
                 return jsonify({'error': f'PDF text extraction failed: {str(e)}'}), 400
             
-            # Analyze the resume
             try:
                 extracted_data = analyze_resume(resume_text, links)
+                
+                # Ensure personal information is properly structured
+                if 'personal_information' not in extracted_data:
+                    extracted_data['personal_information'] = {}
+                
+                # Print extracted data for debugging
+                print("Extracted personal information:", extracted_data.get('personal_information', {}))
+                
                 session['analysis'] = extracted_data
                 
+                # Return a more structured response
                 return jsonify({
                     'success': True,
-                    'data': extracted_data
+                    'data': {
+                        'personal_information': {
+                            'name': extracted_data.get('personal_information', {}).get('name', ''),
+                            'phone': extracted_data.get('personal_information', {}).get('phone', ''),
+                            'country': extracted_data.get('personal_information', {}).get('country', ''),
+                            'email': extracted_data.get('personal_information', {}).get('email', '')
+                        },
+                        'skills': extracted_data.get('skills', []),
+                        'experience': extracted_data.get('experience', []),
+                        'education': extracted_data.get('education', []),
+                        'projects': extracted_data.get('projects', [])
+                    }
                 })
             except Exception as e:
+                print(f"Resume analysis error: {str(e)}")  # Add debug logging
                 return jsonify({'error': f'Resume analysis failed: {str(e)}'}), 400
                 
         except Exception as e:
             return jsonify({'error': f'Error processing PDF: {str(e)}'}), 400
         finally:
-            # Clean up the uploaded file
             if os.path.exists(filepath):
                 try:
                     os.remove(filepath)
