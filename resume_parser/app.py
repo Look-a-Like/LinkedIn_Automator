@@ -9,6 +9,8 @@ from resume_processing import analyze_resume
 from job_suggestion import suggest_jobs, generate_linkedin_search_url
 from linkedin_automation import LinkedInAutomation
 import yaml
+from selenium import webdriver
+from smart_agent import SmartAgent
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'
@@ -217,6 +219,61 @@ def save_resume():
         return jsonify({
             'error': f'Failed to save resume data: {str(e)}'
         }), 500
+
+# Add after the existing /start_automation endpoint
+@app.route('/start_automation_smart', methods=['POST'])
+def start_automation_smart():
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+        job_urls = data.get('jobUrls', [])
+        resume_data = data.get('resumeData', {})
+        
+        if not all([email, password, job_urls]):
+            return jsonify({'error': 'Missing required information'}), 400
+        
+        # Initialize Chrome driver
+        options = webdriver.ChromeOptions()
+        driver = webdriver.Chrome(options=options)
+        
+        # Initialize SmartAgent
+        agent = SmartAgent(driver, resume_data)
+        
+        try:
+            # Login to LinkedIn
+            if not agent.login(email, password):
+                return jsonify({'error': 'Failed to login to LinkedIn'}), 400
+            
+            # Apply to each job
+            results = []
+            for job_url in job_urls:
+                try:
+                    success = agent.apply_to_job(job_url)
+                    results.append({
+                        'url': job_url,
+                        'success': success
+                    })
+                except Exception as e:
+                    print(f"Error applying to job {job_url}: {str(e)}")
+                    results.append({
+                        'url': job_url,
+                        'success': False,
+                        'error': str(e)
+                    })
+            
+            return jsonify({
+                'success': True,
+                'results': results
+            })
+            
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            driver.quit()
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

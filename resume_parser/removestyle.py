@@ -27,4 +27,4 @@ def remove_styling(html_file, output_file):
     print(f"Styling removed. Cleaned HTML saved to {output_file}")
 
 # Replace 'input.html' and 'output.html' with your actual file paths
-remove_styling('easy.html', 'clean_easy.html')
+remove_styling('easy2.html', 'clean_easy.html')
