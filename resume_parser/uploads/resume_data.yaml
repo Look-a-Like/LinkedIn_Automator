@@ -1,0 +1,86 @@
+education: []
+experience:
+- company: ''
+  description: []
+  duration: ''
+  title: Comparative study of UAV Path Planning Algorithms | Python
+- company: ''
+  description:
+  - Implemented UAV path planning algorithms (Dynamic Window Approach and RFA-Star)
+    using Python,
+  duration: ''
+  title: Jan. 2025 – May. 2025
+- company: ''
+  description:
+  - Conducted comparative analysis of algorithm performance, achieving up to a 99%
+    reduction in planning
+  duration: ''
+  title: simulating navigation across 2D grids and 3D terrains with complex obstacles.
+- company: ''
+  description:
+  - Evaluated path optimality and computational efficiency, demonstrating DWA’s near-optimal
+    paths in random
+  duration: ''
+  title: time with RFA-Star in structured environments and a 63.9% faster execution
+    in 3D terrains compared to DWA.
+- company: ''
+  description: []
+  duration: ''
+  title: obstacle scenarios (2% above optimal), enhancing insights for scenario-specific
+    UAV navigation strategies.
+- company: ''
+  description: []
+  duration: ''
+  title: 'Under Supervision of: Dr. Rakesh Matam (Associate Professor at IIIT Guwahati)'
+personal_information:
+  country: India
+  email: basumadhuboni@gmail.com
+  name: Madhuboni Basu
+  phone: +91 8972167117
+projects:
+- description:
+  - Developed an end-to-end automated job application system using Streamlit and Python,
+    processing 500+ applications
+  - Implemented resume analysis with pdfplumber and NLP, achieving 93% extraction
+    accuracy for 1,000+ resumes and
+  - Integrated Selenium for LinkedIn automation, navigating 300+ ”Easy Apply” jobs
+    with 80% fewer user actions (from 25+
+  - Designed a user-friendly interface with customizable job search parameters, boosting
+    efficiency by enabling 5+ filter options
+  duration: Jan. 2025 - Apr. 2025
+  technologies: Streamlit, Python, Selenium, pdfplumber, PyYAML
+  title: Automated LinkedIn Job Application Tool §
+- description:
+  - Developed Materna, an AI-powered maternal health platform, using React and TypeScript
+    to create a responsive
+  - Implemented multilingual support for 12 regional Indian languages via the Google
+    Translate API, boosting user
+  - Integrated AI/ML models with PyTorch and Hugging Face, including a fine-tuned
+    Mistral-7B-Instruct model and a
+  - Deployed the platform on AWS with offline capabilities and Twilio-powered real-time
+    alerts, reducing maternal
+  duration: ''
+  technologies: 2 Prototype Video
+  title: Materna §
+- description:
+  - Built an interactive NLP-based Sentiment Analysis app using TextBlob and Streamlit,
+    enabling users to analyze both
+  - Achieved real-time sentiment scoring with polarity and subjectivity metrics, and
+    classified sentiments into Positive,
+  - Enabled CSV file analysis with automated sentiment labeling and downloadable results,
+    supporting datasets with over
+  - Integrated visualizations including bar plots, box plots, and time trend analysis
+    for detailed insights, reducing user
+  - 'GATE 2025: Secured a rank of 532 and a score of 767.'
+  duration: Dec. 2024 - Jan. 2025
+  technologies: 2 Website Link
+  title: Sentiment Analysis App §
+skills:
+- 'Programming Languages: C/C++'
+- Python
+- Java
+- SQL
+- 'Databases: MySQL'
+- MongoDB (NoSQL)
+- 'Frameworks and Tools: Node.js'
+- React.js

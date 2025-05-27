@@ -68,6 +68,9 @@ function showAnalysisResults(data) {
                 `).join('') : ''}
                 
                 <div class="text-center mt-4">
+                    <button class="btn btn-success me-3" onclick="saveResumeData()">
+                        <i class="fas fa-save me-2"></i>Save Info
+                    </button>
                     <button class="btn btn-primary btn-lg" onclick="findJobs()">
                         <i class="fas fa-search me-2"></i>Find Relevant Jobs
                     </button>
@@ -209,6 +212,9 @@ function showAnalysisResults(data) {
                 `).join('') : ''}
                 
                 <div class="text-center mt-4">
+                    <button class="btn btn-success me-3" onclick="saveResumeData()">
+                        <i class="fas fa-save me-2"></i>Save Info
+                    </button>
                     <button class="btn btn-primary btn-lg" onclick="findJobs()">
                         <i class="fas fa-search me-2"></i>Find Relevant Jobs
                     </button>
@@ -344,3 +350,40 @@ document.querySelector('form').addEventListener('submit', async function(e) {
         alert(error.message || 'An error occurred while uploading the resume');
     }
 });
+
+
+async function saveResumeData() {
+    try {
+        const saveButton = document.querySelector('button.btn-success');
+        if (saveButton) {
+            saveButton.disabled = true;
+            saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+        }
+
+        const response = await fetch('/save_resume', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to save resume data');
+        }
+        
+        if (result.success) {
+            alert('Resume data saved successfully!');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message || 'An error occurred while saving resume data');
+    } finally {
+        const saveButton = document.querySelector('button.btn-success');
+        if (saveButton) {
+            saveButton.disabled = false;
+            saveButton.innerHTML = '<i class="fas fa-save me-2"></i>Save Info';
+        }
+    }
+}

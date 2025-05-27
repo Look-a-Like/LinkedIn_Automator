@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 def navigate_to_job(driver, wait, job_url):
     """Navigates to a job posting and attempts to click 'Easy Apply'."""
     try:

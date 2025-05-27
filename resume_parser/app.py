@@ -8,6 +8,7 @@ from pdfminer.high_level import extract_text
 from resume_processing import analyze_resume
 from job_suggestion import suggest_jobs, generate_linkedin_search_url
 from linkedin_automation import LinkedInAutomation
+import yaml
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'
@@ -190,6 +191,32 @@ def start_automation():
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/save_resume', methods=['POST'])
+def save_resume():
+    if 'analysis' not in session:
+        return jsonify({'error': 'No resume analysis found'}), 400
+    
+    try:
+        # Ensure uploads directory exists
+        os.makedirs('uploads', exist_ok=True)
+        
+        # Get the analysis data from session
+        resume_data = session['analysis']
+        
+        # Save to YAML file
+        yaml_path = os.path.join('uploads', 'resume_data.yaml')
+        with open(yaml_path, 'w', encoding='utf-8') as f:
+            yaml.dump(resume_data, f, default_flow_style=False, allow_unicode=True)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Resume data saved successfully'
+        })
+    except Exception as e:
+        return jsonify({
+            'error': f'Failed to save resume data: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -28,6 +28,20 @@ def extract_text_from_pdf(uploaded_file):
 
     return text, links
 
+def save_resume_data(data):
+    """Save the resume data to a YAML file in the uploads directory."""
+    try:
+        # Create uploads directory if it doesn't exist
+        os.makedirs('uploads', exist_ok=True)
+        
+        # Save to YAML file
+        yaml_path = os.path.join('uploads', 'resume_data.yaml')
+        with open(yaml_path, 'w') as file:
+            yaml.dump(data, file, default_flow_style=False)
+        return True, f"Resume data saved successfully to {yaml_path}"
+    except Exception as e:
+        return False, f"Error saving resume data: {str(e)}"
+
 def analyze_resume(text, links):
     """
     Analyze the resume text and extract relevant information with improved structure
@@ -248,6 +262,24 @@ def analyze_resume(text, links):
 
         return yaml.safe_load(cleaned_analysis)  # Convert YAML string to dictionary
 
+        # After analysis is complete, add a save button
+        if st.button("Save Info"):
+            success, message = save_resume_data(data)
+            if success:
+                st.success(message)
+            else:
+                st.error(message)
+        
+        return data
+    except Exception as e:
+        print(f"Error in analyze_resume: {str(e)}")
+        return data
+        
+    return data
+    
+    try:
+        # Process resume analysis
+        pass
     except Exception as e:
         st.error(f"Error analyzing resume: {e}")
         return {}
