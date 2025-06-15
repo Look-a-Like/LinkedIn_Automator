@@ -1,0 +1,102 @@
+achievements:
+- description: Secured top 8,000 ranking in the first round out of 400,000 participants.
+  name: Flipkart Grid 6.0
+- description: Advanced to Semifinal Round. Developed and submitted an innovative
+    e-commerce idea.
+  name: Rebel Foods EatSure Cloud 2024 Hackathon
+availability: {}
+certifications: []
+education_details:
+- education_level: B.Tech
+  field_of_study: Computer Science Engineering
+  final_evaluation_grade: 8.3/10
+  institution: Indian Institute of Information Technology
+  start_date: December,2022
+  year_of_completion: '2026'
+- education_level: Primary Education
+  field_of_study: null
+  final_evaluation_grade: '94'
+  institution: Carmel School
+  start_date: January, 2007
+  year_of_completion: '2020'
+- education_level: Higher Secondary Education
+  field_of_study: null
+  final_evaluation_grade: '94.3'
+  institution: DAV
+  start_date: June,2020
+  year_of_completion: '2022'
+experience_details: []
+interests: []
+job_preferences:
+  company_preferences:
+  - Mid-size
+  date_availability: after 3 months
+  easy_apply_preferred: 'Yes'
+  experience_level:
+  - Entry Level
+  workplace_type:
+  - On-site
+languages: []
+legal_authorization:
+  legally_allowed_to_work_in_india: 'Yes'
+  requires_sponsorship: 'No'
+  requires_visa: 'No'
+  work_authorization: 'Yes'
+personal_information:
+  address: Durgapur, West Bengal ,India
+  city: Durgapur
+  country: India
+  date_of_birth: null
+  email: basumadhuboni@gmail.com
+  github: https://github.com/basumadhuboni
+  linkedin: null
+  name: Madhuboni
+  phone: '8972167117'
+  phone_prefix: '+91'
+  surname: Basu
+  zip_code: null
+projects:
+- description: Engineered a comprehensive web-based Hostel Management System for Indian
+    Institute of Information Technology, Guwahati, optimizing communication and streamlining
+    the management of over 500 rooms and facilities.
+  link: https://github.com/basumadhuboni/hostel-management
+  name: Hostel Management System
+- description: Created an interactive and highly engaging UI for a global weather
+    application, enabling users to effortlessly view current weather conditions for
+    any location worldwide.
+  link: https://github.com/basumadhuboni/weather-app
+  name: Weather App
+- description: Designed and executed a fully responsive UI for a task management application,
+    significantly improving task organization and user productivity across both desktop
+    and mobile platforms.
+  link: https://github.com/basumadhuboni/todolist
+  name: To-Do-List App
+salary_expectations:
+  salary_range_usd: null
+self_identification:
+  disability: null
+  ethnicity: null
+  gender: Female
+  pronouns: null
+  veteran: null
+skills:
+- C
+- C++
+- Python
+- HTML
+- Reactjs
+- Nodejs
+- MYSQL
+- MongoDb
+- DSA
+- Algorithm
+- DBMS
+- Operating Systems
+- Computer Networks
+work_preferences:
+  in_person_work: 'Yes'
+  open_to_relocation: 'Yes'
+  remote_work: 'No'
+  willing_to_complete_assessments: 'No'
+  willing_to_undergo_background_checks: 'No'
+  willing_to_undergo_drug_tests: 'No'
